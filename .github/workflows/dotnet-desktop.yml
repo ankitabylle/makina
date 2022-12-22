@@ -1,4 +1,4 @@
-name: Build and deploy .NET Core application to Web App vitasln
+name: makinadeployment
 on:
   push:
     branches:
@@ -23,8 +23,6 @@ jobs:
       run: dotnet restore "${{ env.WORKING_DIRECTORY }}"
     - name: Build
       run: dotnet build "${{ env.WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-restore
-    - name: Test
-      run: dotnet test  --no-build
     - name: Publish
       run: dotnet publish "${{ env.WORKING_DIRECTORY }}"  --configuration ${{ env.CONFIGURATION }} --no-build
     - name: Configure AWS credentials from Test account
