@@ -34,7 +34,7 @@ jobs:
     - name: install Lambda tools
       run: dotnet tool install -g Amazon.Lambda.Tools 
     - name: generate
-      run: dotnet lambda package
+      run: dotnet lambda package-ci
     - name: publish
       run: aws lambda update-function-code --function-name=apitest6 --zip-file=fileb://${{ env.FilePath }}
 
