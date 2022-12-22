@@ -1,0 +1,43 @@
+name: Build and deploy .NET Core application to Web App vitasln
+on:
+  push:
+    branches:
+    - main
+env:
+  CONFIGURATION: Release
+  DOTNET_CORE_VERSION: 6.0.x
+  FilePath: bin\Release\net6.0\makina.zip
+  WORKING_DIRECTORY: makina
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: ${{ env.DOTNET_CORE_VERSION }}
+    - name: checkout
+      run: cd "${{ env.WORKING_DIRECTORY }}"
+    - name: Restore
+      run: dotnet restore "${{ env.WORKING_DIRECTORY }}"
+    - name: Build
+      run: dotnet build "${{ env.WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-restore
+    - name: Test
+      run: dotnet test  --no-build
+    - name: Publish
+      run: dotnet publish "${{ env.WORKING_DIRECTORY }}"  --configuration ${{ env.CONFIGURATION }} --no-build
+    - name: Configure AWS credentials from Test account
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }} 
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-2
+    - name: install Lambda tools
+      run: dotnet tool install -g Amazon.Lambda.Tools 
+    - name: generate
+      run: dotnet lambda package
+    - name: publish
+      run: aws lambda update-function-code --function-name=apitest6 --zip-file=fileb://${{ env.FilePath }}
+
+         
