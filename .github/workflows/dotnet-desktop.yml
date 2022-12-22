@@ -10,7 +10,7 @@ env:
   WORKING_DIRECTORY: makina
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     steps:
     - uses: actions/checkout@v2
     - name: Setup .NET Core
@@ -31,10 +31,12 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }} 
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-2
-    - name: install Lambda tools
-      run: dotnet tool install -g Amazon.Lambda.Tools 
+    #- name: install Lambda tools
+      #run: dotnet tool install -g Amazon.Lambda.Tools 
     - name: zip
-      run: dotnet lambda package
+      run: |
+        cd ${{ env.WORKING_DIRECTORY }}
+        powershell Compress-Archive "*" makina.zip
       #run: |
         #zip -r makina.zip ${{ env.FilePath }}
     - name: publish
