@@ -17,12 +17,14 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: ${{ env.DOTNET_CORE_VERSION }}
+    - name: create directory
+      run: mkdir  -p "${{ env.FilePath }}"
     - name: Restore
       run: dotnet restore "${{ env.WORKING_DIRECTORY }}"
     - name: Build
       run: dotnet build "${{ env.WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-restore
     - name: Publish
-      run: dotnet publish "${{ env.WORKING_DIRECTORY }}"  --configuration ${{ env.CONFIGURATION }} --no-build
+      run: dotnet publish "${{ env.WORKING_DIRECTORY }}"  --configuration ${{ env.CONFIGURATION }} --no-build --output "${{ env.FilePath }}"
     - name: Configure AWS credentials from Test account
       uses: aws-actions/configure-aws-credentials@v1
       with:
