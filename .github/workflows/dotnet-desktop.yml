@@ -35,10 +35,11 @@ jobs:
       #run: dotnet tool install -g Amazon.Lambda.Tools 
     - name: zip
       run: |
-        powershell Compress-Archive "${{ env.FilePath }}/*" makina.zip
+        cd ${{ env.FilePath }}
+        powershell Compress-Archive "*" makina.zip
       #run: |
         #zip -r makina.zip ${{ env.FilePath }}
     - name: publish
-      run: aws lambda update-function-code --function-name=apitest6 --zip-file=fileb://${{ env.FilePath }}/makina.zip
+      run: aws lambda update-function-code --function-name=apitest6 --zip-file=fileb://makina.zip
 
          
