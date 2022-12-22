@@ -6,19 +6,17 @@ on:
 env:
   CONFIGURATION: Release
   DOTNET_CORE_VERSION: 6.0.x
-  FilePath: bin\Release\net6.0\makina.zip
+  FilePath: bin\Release\net6.0\publish
   WORKING_DIRECTORY: makina
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: ${{ env.DOTNET_CORE_VERSION }}
-    - name: checkout
-      run: cd "${{ env.WORKING_DIRECTORY }}"
     - name: Restore
       run: dotnet restore "${{ env.WORKING_DIRECTORY }}"
     - name: Build
@@ -33,9 +31,10 @@ jobs:
           aws-region: us-east-2
     - name: install Lambda tools
       run: dotnet tool install -g Amazon.Lambda.Tools 
-    - name: generate
-      run: dotnet lambda package-ci
+    - name: zip
+      run: |
+        zip -r makina.zip ${{ env.FilePath }}
     - name: publish
-      run: aws lambda update-function-code --function-name=apitest6 --zip-file=fileb://${{ env.FilePath }}
+      run: aws lambda update-function-code --function-name=apitest6 --zip-file=fileb://makina.zip
 
          
