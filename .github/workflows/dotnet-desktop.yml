@@ -20,13 +20,13 @@ jobs:
     - name: checkout
       run: cd "${{ env.WORKING_DIRECTORY }}"
     - name: Restore
-      run: dotnet restore
+      run: dotnet restore "${{ env.WORKING_DIRECTORY }}"
     - name: Build
-      run: dotnet build --configuration ${{ env.CONFIGURATION }} --no-restore
+      run: dotnet build "${{ env.WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-restore
     - name: Test
       run: dotnet test  --no-build
     - name: Publish
-      run: dotnet publish  --configuration ${{ env.CONFIGURATION }} --no-build
+      run: dotnet publish "${{ env.WORKING_DIRECTORY }}"  --configuration ${{ env.CONFIGURATION }} --no-build
     - name: Configure AWS credentials from Test account
       uses: aws-actions/configure-aws-credentials@v1
       with:
