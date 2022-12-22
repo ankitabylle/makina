@@ -40,6 +40,8 @@ jobs:
       #run: |
         #zip -r makina.zip ${{ env.FilePath }}
     - name: publish
-      run: aws lambda update-function-code --function-name=apitest6 --zip-file=fileb://makina.zip
+      run: |
+        dir
+        aws lambda update-function-code --function-name=apitest6 --zip-file=fileb://makina.zip
 
          
