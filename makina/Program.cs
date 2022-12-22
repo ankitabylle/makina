@@ -52,7 +52,7 @@ app.UseEndpoints(endpoints =>
     endpoints.MapControllers();
     endpoints.MapGet("/", async context =>
     {
-        await context.Response.WriteAsync("Welcome to running ASP.NET Core on AWS Lambda auto deployment");
+        await context.Response.WriteAsync("Welcome to running ASP.NET Core on AWS Lambda");
     });
 });
 app.Run();
